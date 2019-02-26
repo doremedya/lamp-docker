@@ -22,7 +22,8 @@ services:
             - ./config/config.inc.php:/etc/phpMyAdmin/config.inc.php
             - ./config/php.ini:/etc/php.d/php.ini
             - ./config/xdebug.ini:/etc/php.d/xdebug.ini
-            #- /Volumes/a/2018-2019-OKULLAR/Kadir Has Anadolu Lisesi:/var/www/html/anilarimiz/public_html/okul
+            #- /Volumes/a/2018-2019-OKULLAR/istem koleji:/var/www/html/anilarimiz/public_html/okul
+            
         extra_hosts:
             - "docker-host.localhost:127.0.0.1"
                     
@@ -37,20 +38,20 @@ services:
         ports:
             - '3306:3306'
 
-    #postgres:
-    #    image: postgres:10.5
-    #    environment:
-    #        POSTGRES_USER: postgres
-    #        POSTGRES_PASSWORD: 3145
-    #        TZ : Europe/Istanbul
-    #    volumes:
-    #        - postgres_data:/var/lib/postgresql/data
-    #    ports:
-    #        - '5432:5432'
+    postgres:
+        image: postgres:11
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: 3145
+            TZ : Europe/Istanbul
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        ports:
+            - '5432:5432'
 
 volumes:
     mariadb_data:
         external: true
         
-    #postgres_data:
-    #    external: true
+    postgres_data:
+        external: true
