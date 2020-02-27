@@ -1,5 +1,9 @@
 FROM centos:7.4.1708
 
+RUN mv /etc/localtime /etc/localtime.bak
+RUN ln -s /usr/share/zoneinfo/Europe/Istanbul /etc/localtime
+
+RUN yum -y install git
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 
 RUN yum -y install httpd; systemctl enable httpd.service
@@ -7,7 +11,13 @@ RUN rm -rf /etc/httpd/conf.d/welcome.conf
 
 RUN yum install -y yum-utils
 RUN yum-config-manager --enable remi-php72
-RUN yum  install -y yum install php php-mcrypt php-cli php-gd php-curl php-mysqlnd php-ldap php-zip php-fileinfo php-xml php-pdo php-mbstring php-pgsql php-opcache php-xdebug php-simplexml
+RUN yum  install -y yum install php php-gettext php-devel php-pear php-gd2 php-json php-fileinfo php-openssl php-libpcre3-dev php-mcrypt php-cli php-gd php-curl php-mysqlnd php-ldap php-zip php-fileinfo php-xml php-pdo php-mbstring php-pgsql php-opcache php-simplexml
+
+RUN yum install make ghostscript -y
+
+RUN yum install ImageMagick ImageMagick-devel -y
+RUN pecl install imagick 
+RUN echo "extension=imagick.so" > /etc/php.d/imagick.ini
 
 RUN yum --enablerepo=remi,remi-safe install -y phpmyadmin
 RUN rm -rf /etc/httpd/conf.d/phpMyAdmin.conf
@@ -15,11 +25,15 @@ RUN rm -rf /etc/phpMyAdmin/config.inc.php
 
 RUN curl --silent --location https://rpm.nodesource.com/setup_10.x | bash -
 
-RUN yum -y install gcc-c++ make
+RUN yum -y install php-devel pcre-devel gcc gcc-c++ make
 
 RUN yum -y install nodejs
 
 RUN npm install pm2 -g
+
+RUN curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.rpm.sh | bash
+RUN yum -y update
+RUN yum -y install php-phalcon
 
 EXPOSE 80 8000
 

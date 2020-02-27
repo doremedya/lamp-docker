@@ -17,10 +17,7 @@ package-lock.json
 *.log
 
 .vscode
-.docker-sync
+.idea/*
 
 # Dosyaları dahil etme
 www/*
-Dockerfile/Mysql/*
-Dockerfile/Mariadb/*
-Dockerfile/Postgres/*
