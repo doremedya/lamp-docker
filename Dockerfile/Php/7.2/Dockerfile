@@ -1,4 +1,4 @@
-FROM centos:7.4.1708
+FROM centos:7.7.1908
 
 RUN mv /etc/localtime /etc/localtime.bak
 RUN ln -s /usr/share/zoneinfo/Europe/Istanbul /etc/localtime
@@ -10,7 +10,7 @@ RUN yum -y install httpd; systemctl enable httpd.service
 RUN rm -rf /etc/httpd/conf.d/welcome.conf
 
 RUN yum install -y yum-utils
-RUN yum-config-manager --enable remi-php72
+RUN yum-config-manager --enable remi-php74
 RUN yum  install -y yum install php php-gettext php-devel php-pear php-gd2 php-json php-fileinfo php-openssl php-libpcre3-dev php-mcrypt php-cli php-gd php-curl php-mysqlnd php-ldap php-zip php-fileinfo php-xml php-pdo php-mbstring php-pgsql php-opcache php-simplexml
 
 RUN yum install make ghostscript -y
