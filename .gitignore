@@ -21,3 +21,5 @@ package-lock.json
 
 # Dosyaları dahil etme
 www/*
+data/*
+logs/*
