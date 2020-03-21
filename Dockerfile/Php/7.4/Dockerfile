@@ -1,5 +1,7 @@
 FROM centos:7.7.1908
 
+
+
 RUN mv /etc/localtime /etc/localtime.bak
 RUN ln -s /usr/share/zoneinfo/Europe/Istanbul /etc/localtime
 
@@ -12,6 +14,12 @@ RUN rm -rf /etc/httpd/conf.d/welcome.conf
 RUN yum install -y yum-utils
 RUN yum-config-manager --enable remi-php74
 RUN yum  install -y yum install php php-gettext php-devel php-pear php-gd2 php-json php-fileinfo php-openssl php-libpcre3-dev php-mcrypt php-cli php-gd php-curl php-mysqlnd php-ldap php-zip php-fileinfo php-xml php-pdo php-mbstring php-pgsql php-opcache php-simplexml
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN composer global require laravel/installer
+RUN echo "export PATH=${HOME}/.composer/vendor/bin:${PATH}" >> /root/.bashrc
+RUN composer config --global --auth --unset github-oauth.github.com
 
 RUN yum install make ghostscript -y
 
@@ -35,6 +43,5 @@ RUN curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.r
 RUN yum -y update
 RUN yum -y install php-phalcon
 
+CMD [ "/usr/sbin/httpd", "-X" ]
 EXPOSE 80 8000
-
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
