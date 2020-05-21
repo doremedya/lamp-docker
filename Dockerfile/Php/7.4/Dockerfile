@@ -43,5 +43,6 @@ RUN curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.r
 RUN yum -y update
 RUN yum -y install php-phalcon
 
-CMD [ "/usr/sbin/httpd", "-X" ]
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+
 EXPOSE 80 8000

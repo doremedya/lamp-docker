@@ -4,7 +4,7 @@ services:
     web:
         build: './Dockerfile/Php/7.4'
         image: hakankaya/centos-php:7.7
-        working_dir: /var/www/html/
+        working_dir: /var/www/html/anilarimiz/laravel
         restart: always
         ports:
             - '80:80'
@@ -12,6 +12,7 @@ services:
         depends_on:
         #   - postgres
             - mysql
+            - redis
         links:
         #    - postgres
             - mysql
@@ -33,14 +34,13 @@ services:
                 ipv4_address: 192.168.2.2
                     
     mysql:
-        image: mariadb:10.5.1-bionic
+        image: mariadb:10.5.3-bionic
         restart: always
         environment:
             MYSQL_ROOT_PASSWORD: 3145
             TZ : Europe/Istanbul
         volumes:
-            - ${MYSQL_DATA_DIR-./data/mysql}:/var/lib/mysql
-            - ${MYSQL_LOG_DIR-./logs/mysql}:/var/log/mysql
+            - mariadb_data:/var/lib/mysql
         ports:
             - '3306:3306'
         networks:
@@ -52,8 +52,7 @@ services:
         restart: always
         command: redis-server --requirepass 3145
         volumes:
-            - ${REDIS_DATA_DIR-./data/redis}:/var/lib/redis
-            - ${REDIS_LOG_DIR-./logs/redis}:/var/log/redis
+            - redis_data:/var/lib/redis
         ports:
             - '6379:6379'
         networks:
@@ -74,12 +73,15 @@ services:
             #app_network:
               #  ipv4_address: 192.168.2.4
 
-#volumes:
-    #mariadb_data:
-        #external: true
+volumes:
+    mariadb_data:
+        external: true
         
-    #postgres_data:
-        #external: true
+    postgres_data:
+        external: true
+
+    redis_data:
+        external: true
 
 networks:
     app_network:
