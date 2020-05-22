@@ -1,9 +1,41 @@
 version: '3'
 
 services:
-    web:
+    php7.2:
+        build: './Dockerfile/Php/7.2'
+        image: hakankaya/centos-php:7.2
+        working_dir: /var/www/html/anilarimiz/laravel
+        restart: always
+        ports:
+            - '82:80'
+            - '8200:8000'
+        depends_on:
+        #   - postgres
+            - mysql
+            - redis
+        links:
+        #    - postgres
+            - mysql
+            - redis
+        volumes:
+            - ./www:/var/www/html:cached
+            - ./config/vhost.conf:/etc/httpd/conf.d/vhost.conf
+            - ./config/phpMyAdmin.conf:/etc/httpd/conf.d/phpMyAdmin.conf
+            - ./config/config.inc.php:/etc/phpMyAdmin/config.inc.php
+            - ./config/php.ini:/etc/php.d/php.ini
+            #- ./config/xdebug.ini:/etc/php.d/xdebug.ini
+            #- /Volumes/a/2018-2019-OKULLAR/istem koleji:/var/www/html/anilarimiz/public_html/okul
+            
+        extra_hosts:
+            - "docker-host.localhost:127.0.0.1" #Host Dosyasına ekliyor
+
+        networks:
+            app_network:
+                ipv4_address: 192.168.2.10
+    
+    php7.4:
         build: './Dockerfile/Php/7.4'
-        image: hakankaya/centos-php:7.7
+        image: hakankaya/centos-php:7.4
         working_dir: /var/www/html/anilarimiz/laravel
         restart: always
         ports:
