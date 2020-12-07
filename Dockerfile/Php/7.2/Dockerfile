@@ -23,7 +23,7 @@ RUN composer config --global --auth --unset github-oauth.github.com
 
 RUN yum install make ghostscript -y
 
-RUN yum install ImageMagick ImageMagick-devel -y
+RUN yum install ImageMagick ImageMagick-devel pcre-devel -y
 RUN pecl install imagick 
 RUN echo "extension=imagick.so" > /etc/php.d/imagick.ini
 

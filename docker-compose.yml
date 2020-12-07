@@ -10,11 +10,11 @@ services:
             - '82:80'
             - '8200:8000'
         depends_on:
-        #   - postgres
+            - postgres
             - mysql
             - redis
         links:
-        #    - postgres
+            - postgres
             - mysql
             - redis
         volumes:
@@ -42,11 +42,11 @@ services:
             - '80:80'
             - '8000:8000'
         depends_on:
-        #   - postgres
+            - postgres
             - mysql
             - redis
         links:
-        #    - postgres
+            - postgres
             - mysql
             - redis
         volumes:
@@ -91,19 +91,19 @@ services:
             app_network:
                 ipv4_address: 192.168.2.4
 
-   # postgres:
-       # image: postgres:11
-        #environment:
-         #   POSTGRES_USER: postgres
-          #  POSTGRES_PASSWORD: 3145
-           # TZ : Europe/Istanbul
-       # volumes:
-           # - postgres_data:/var/lib/postgresql/data
-       # ports:
-           # - '5432:5432'
-        #networks:
-            #app_network:
-              #  ipv4_address: 192.168.2.4
+    postgres:
+        image: postgres:12
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: 3145
+            TZ : Europe/Istanbul
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        ports:
+            - '5432:5432'
+        networks:
+            app_network:
+                ipv4_address: 192.168.2.5
 
 volumes:
     mariadb_data:

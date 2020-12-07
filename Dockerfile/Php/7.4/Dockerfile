@@ -1,7 +1,5 @@
 FROM centos:7.7.1908
 
-
-
 RUN mv /etc/localtime /etc/localtime.bak
 RUN ln -s /usr/share/zoneinfo/Europe/Istanbul /etc/localtime
 
@@ -10,6 +8,8 @@ RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.n
 
 RUN yum -y install httpd; systemctl enable httpd.service
 RUN rm -rf /etc/httpd/conf.d/welcome.conf
+
+RUN yum groupinstall Development Tools -y
 
 RUN yum install -y yum-utils
 RUN yum-config-manager --enable remi-php74
@@ -23,7 +23,7 @@ RUN composer config --global --auth --unset github-oauth.github.com
 
 RUN yum install make ghostscript -y
 
-RUN yum install ImageMagick ImageMagick-devel -y
+RUN yum install ImageMagick ImageMagick-devel pcre-devel -y
 RUN pecl install imagick 
 RUN echo "extension=imagick.so" > /etc/php.d/imagick.ini
 
