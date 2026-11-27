@@ -23,7 +23,7 @@ Konteyner adları, IP'ler ve `lamp_app_network` ağ adı sabittir. Projelerin te
 ## Kurulum (Ubuntu)
 ```bash
 cd ~/projeler
-git clone git@github.com:<kullanici>/lamp.git
+git clone git@github.com:doremedya/lamp-docker.git lamp
 cd lamp
 make build      # .env yoksa .env.example'dan oluşturur
 make up
