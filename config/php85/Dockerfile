@@ -15,4 +15,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Apache host kullanıcısıyla aynı uid/gid ile çalışsın (bind mount izin sorunu olmasın)
 RUN groupmod -o -g ${GID} www-data && usermod -o -u ${UID} -g ${GID} www-data
 
-RUN a2enmod rewrite headers
+RUN a2enmod rewrite headers proxy proxy_http

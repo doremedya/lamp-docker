@@ -16,7 +16,7 @@
 | PHP 8.5 + Apache | `php85_server` | `:82` · 192.168.10.30 | profil `yeni` |
 | MariaDB 10.3 | `mariadb_103` | `:3306` · iç ad `db103` | açık |
 | MariaDB latest | `mariadb_latest` | `:3307` · iç ad `db_latest` | profil `dblatest` |
-| phpMyAdmin | `pma_panel` | `:9000` | açık |
+| phpMyAdmin | `pma_panel` | http://pma.test veya `:9000` | açık |
 
 Konteyner adları, IP'ler ve `lamp_app_network` ağ adı sabittir. Projelerin test betikleri bunlara güvenir, değiştirmeyin.
 
