@@ -1,0 +1,126 @@
+# Ortak LAMP geliştirme ortamı
+# ~/projeler altındaki tüm projeler /var/www/html altına bağlanır, her site için sites/*.conf vhost dosyası vardır.
+# Varsayılan: web84 + db103 + phpmyadmin. Diğerleri profille açılır (bkz. Makefile: up-hepsi).
+name: lamp
+
+x-web: &web
+  environment:
+    TZ: Europe/Istanbul
+  volumes:
+    - ..:/var/www/html                                   # ~/projeler
+    - ./sites:/etc/apache2/sites-enabled:ro              # ortak vhost'lar
+    - ./config/php.ini:/usr/local/etc/php/php.ini:ro     # ortak php ayarları
+  depends_on:
+    - db103
+  restart: unless-stopped
+
+x-build-args: &build-args
+  UID: ${UID:-1000}
+  GID: ${GID:-1000}
+
+services:
+  # PHP 8.4 (Port 80) - canlı sunucuyla aynı, ana geliştirme ortamı
+  web84:
+    <<: *web
+    build:
+      context: ./config/php84/
+      args: *build-args
+    image: lamp-php84
+    container_name: php84_server
+    networks:
+      app_network:
+        ipv4_address: 192.168.10.20
+    ports:
+      - "${WEB84_PORT:-80}:80"
+
+  # PHP 7.4 (Port 81) - eski sürüm, sadece uyumluluk denemesi
+  web74:
+    <<: *web
+    profiles: ["eski"]
+    build:
+      context: ./config/php74/
+      args: *build-args
+    image: lamp-php74
+    container_name: php74_server
+    networks:
+      app_network:
+        ipv4_address: 192.168.10.10
+    ports:
+      - "${WEB74_PORT:-81}:80"
+
+  # PHP 8.5 (Port 82) - yeni sürüm denemesi
+  web85:
+    <<: *web
+    profiles: ["yeni"]
+    build:
+      context: ./config/php85/
+      args: *build-args
+    image: lamp-php85
+    container_name: php85_server
+    networks:
+      app_network:
+        ipv4_address: 192.168.10.30
+    ports:
+      - "${WEB85_PORT:-82}:80"
+
+  # Veritabanı: MariaDB 10.3
+  db103:
+    image: mariadb:10.3.39
+    container_name: mariadb_103
+    restart: unless-stopped
+    ports:
+      - "${DB_BIND:-0.0.0.0}:${DB103_PORT:-3306}:3306"
+    environment:
+      TZ: Europe/Istanbul
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    networks:
+      app_network:
+        ipv4_address: 192.168.10.11
+    volumes:
+      - db103_data:/var/lib/mysql
+
+  # Veritabanı: MariaDB Latest (profil: dblatest)
+  db_latest:
+    image: mariadb:latest
+    profiles: ["dblatest"]
+    container_name: mariadb_latest
+    restart: unless-stopped
+    ports:
+      - "${DB_BIND:-0.0.0.0}:${DBLATEST_PORT:-3307}:3306"
+    environment:
+      TZ: Europe/Istanbul
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    networks:
+      app_network:
+        ipv4_address: 192.168.10.31
+    volumes:
+      - db_latest_data:/var/lib/mysql
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: pma_panel
+    restart: unless-stopped
+    ports:
+      - "${PMA_BIND:-0.0.0.0}:${PMA_PORT:-9000}:80"
+    networks:
+      app_network:
+        ipv4_address: 192.168.10.100
+    environment:
+      PMA_HOSTS: db103,db_latest
+      UPLOAD_LIMIT: 500M
+    depends_on:
+      - db103
+
+networks:
+  app_network:
+    name: lamp_app_network
+    ipam:
+      config:
+        - subnet: 192.168.10.0/24
+
+volumes:
+  db103_data:
+    name: mariadb_db103_data
+  db_latest_data:
+    name: mariadb_latest_data
