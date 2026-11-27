@@ -17,6 +17,13 @@
 | MariaDB 10.3 | `mariadb_103` | `:3306` · iç ad `db103` | açık |
 | MariaDB latest | `mariadb_latest` | `:3307` · iç ad `db_latest` | profil `dblatest` |
 | phpMyAdmin | `pma_panel` | http://pma.test veya `:9000` | açık |
+| Mailpit (sahte SMTP) | `mailpit` | http://mail.test veya `:8025` · SMTP `mailpit:1025` | açık |
+
+## E-posta: Mailpit
+Geliştirmede gerçek müşterilere e-posta gitmemesi için tüm e-postalar Mailpit'te yakalanır ve http://mail.test adresinde görüntülenir.
+- Projelerde SMTP ayarı: host `mailpit`, port `1025`, kimlik doğrulama ve TLS yok.
+- Mezuniyet projesi bunu kendisi yapar: `APP_ENV=local` iken veritabanındaki SMTP ayarlarını yok sayar ve sadece Mailpit'e gönderir. SMS ise hiç gönderilmez.
+- Yeni bir projede de aynı kural uygulanmalı: yerelde gerçek SMTP veya SMS servisine asla bağlanılmamalı.
 
 Konteyner adları, IP'ler ve `lamp_app_network` ağ adı sabittir. Projelerin test betikleri bunlara güvenir, değiştirmeyin.
 

@@ -112,6 +112,21 @@ services:
     depends_on:
       - db103
 
+  # Mailpit: sahte SMTP. Geliştirmede tüm e-postalar burada yakalanır, gerçek alıcıya gitmez.
+  # Projeler SMTP olarak mailpit:1025 kullanır (kimlik doğrulama/TLS yok). Arayüz: http://mail.test veya :8025
+  mailpit:
+    image: axllent/mailpit:v1.27.4
+    container_name: mailpit
+    restart: unless-stopped
+    ports:
+      - "${PMA_BIND:-0.0.0.0}:${MAILPIT_PORT:-8025}:8025"
+    environment:
+      TZ: Europe/Istanbul
+      MP_MAX_MESSAGES: 5000
+    networks:
+      app_network:
+        ipv4_address: 192.168.10.40
+
 networks:
   app_network:
     name: lamp_app_network
